@@ -1,16 +1,14 @@
 package com.optus.jwtgen.utils;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.openssl.PEMKeyPair;
+import org.bouncycastle.openssl.PEMParser;
+import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
+import java.io.*;
+import java.security.*;
 import java.security.spec.EncodedKeySpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -68,7 +66,15 @@ public class PemUtils {
     }
 
     public static PrivateKey readPrivateKeyFromFile(String filepath, String algorithm) throws IOException {
-        byte[] bytes = PemUtils.parsePEMFile(new File(filepath));
-        return PemUtils.getPrivateKey(bytes, algorithm);
+        //byte[] bytes = PemUtils.parsePEMFile(new File(filepath));
+        //return PemUtils.getPrivateKey(bytes, algorithm);
+
+        BufferedReader br = new BufferedReader(new FileReader(filepath));
+        Security.addProvider(new BouncyCastleProvider());
+        PEMParser pp = new PEMParser(br);
+        PEMKeyPair pemKeyPair = (PEMKeyPair) pp.readObject();
+        KeyPair kp = new JcaPEMKeyConverter().getKeyPair(pemKeyPair);
+        pp.close();
+        return kp.getPrivate();
     }
 }
