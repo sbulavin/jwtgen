@@ -25,7 +25,7 @@ public class JwtgenController {
         return "Greetings from JWT generator!";
     }
 
-    @RequestMapping(value = "/token", method = RequestMethod.POST)
+    @RequestMapping(value = "/tokens", method = RequestMethod.POST)
     public String getToken(@Valid @RequestBody JwtPayload payload){
         try {
             return jwtgenService.generateToken(payload);
