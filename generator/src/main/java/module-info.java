@@ -11,6 +11,5 @@ module jwtgen.generator {
     requires spring.context;
     requires bcprov.jdk15on;
     requires bcpkix.jdk15on;
-    exports com.optus.jwtgen.controller to com.testjava;
 
 }
